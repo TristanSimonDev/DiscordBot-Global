@@ -23,6 +23,7 @@
   "homepage": "https://github.com/TristanSimonDev/DiscordBot-Global#readme",
   "dependencies": {
     "@types/node": "^22.7.5",
-    "discord.js": "^14.16.3"
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5"
   }
 }
