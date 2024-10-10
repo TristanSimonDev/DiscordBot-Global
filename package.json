@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/TristanSimonDev/DiscordBot-Global/issues"
   },
-  "homepage": "https://github.com/TristanSimonDev/DiscordBot-Global#readme"
+  "homepage": "https://github.com/TristanSimonDev/DiscordBot-Global#readme",
+  "dependencies": {
+    "@types/node": "^22.7.5",
+    "discord.js": "^14.16.3"
+  }
 }
