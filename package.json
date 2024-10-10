@@ -1,0 +1,24 @@
+{
+  "name": "global-bot",
+  "version": "1.0.0",
+  "description": "A Global Discord Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "Global"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TristanSimonDev/DiscordBot-Global.git"
+  },
+  "keywords": [
+    "Bot",
+    "Discord",
+    "Discord.js"
+  ],
+  "author": "Tristan | S.",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/TristanSimonDev/DiscordBot-Global/issues"
+  },
+  "homepage": "https://github.com/TristanSimonDev/DiscordBot-Global#readme"
+}
