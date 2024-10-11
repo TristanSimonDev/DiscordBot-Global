@@ -9,8 +9,21 @@ module.exports = {
         //check if the Client is an DiscordClient, when not then return and do nothing 
         if (!(client instanceof Discord.Client)) return;
 
-        //Log the Client Info
+        //defiene the Client-Info-Output in an 2 arry output 
+        const client_info = [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+        ]
 
-        console.log()
+        //Use foreach to log the single arrays
+        client_info.forEach(info_array => {
+            console.log(...info_array)
+        })
     }
 }
