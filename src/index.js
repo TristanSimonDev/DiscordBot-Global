@@ -15,8 +15,8 @@ for (const file of EventFiles) {
 
     const Event = require(`./Events/${file}`)
 
-    console.log(ColorOutput(`Event: [${Event.Name}] with EventId [${Event.Id}] loaded successfully`).green)
-    client.on(Event.Name, async (...args) => Event.execute(...args))
+    console.log(ColorOutput(`Event: [${Event.name}] with EventId [${Event.id}] loaded successfully`).green)
+    client[Event.type](Event.name, async (...args) => Event.execute(...args))
 
 }
 
