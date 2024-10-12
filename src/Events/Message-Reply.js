@@ -2,14 +2,19 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const esprima = require('esprima');
 
-// Load Files
-let event_files = fs.readdirSync('src/Event-Functions/Message-Send').filter(file => file.endsWith('.js'));
-console.log(event_files);
+//the path to the folder you want to keep track of
+let path_to_folder = "src/Event-Functions/Message-Send"
 
-fs.watch('src/Event-Functions/Message-Send', (eventType, changed_file_name) => {
-    if (eventType === 'change') { // Only respond to changes, not additions/removals
+// Load Files
+let event_files = fs.readdirSync(path_to_folder).filter(file => file.endsWith('.js'));
+
+//watch the files in the dir
+fs.watch(path_to_folder, (eventType, changed_file_name) => {
+    if (eventType === 'change' || 'rename') { // Only respond changes and new files or rename
         
-        fs.readFile(`src/Event-Functions/Message-Send/${changed_file_name}`, 'utf8', (err, data) => {
+        //read the file that got changed
+        fs.readFile(`${path_to_folder}/${changed_file_name}`, 'utf8', (err, data) => {
+
             if (err) {
                 console.error('Error reading file:', err);
                 return;
@@ -18,23 +23,23 @@ fs.watch('src/Event-Functions/Message-Send', (eventType, changed_file_name) => {
             // Parse the JavaScript code to check for syntax errors
             try {
                 esprima.parseScript(data); // This will throw an error if there are syntax errors
-                console.log(`No syntax errors found in file src/Event-Functions/Message-Send/${changed_file_name}`);
+                console.log(`No syntax errors found in file ${path_to_folder}/${changed_file_name}`);
 
                 // Clear the cache for the changed module
                 delete require.cache[require.resolve(`../Event-Functions/Message-Send/${changed_file_name}`)];
                 
-                // Update the event_files array (optional, if you want to keep track of the latest versions)
-                const index = event_files.findIndex(file => file === changed_file_name);
-                if (index >= 0) {
-                    event_files[index] = changed_file_name;
-                }
+                //The event_files.findIndex(file => file === changed_file_name)
+                event_files[event_files.findIndex(file => file === changed_file_name)] = changed_file_name;
 
             } catch (parseErr) {
                 console.error('Syntax error detected:', parseErr.message);
             }
+            
         });
     }
 });
+
+
 
 module.exports = {
     name: Discord.Events.MessageCreate,

@@ -13,7 +13,7 @@ module.exports = {
         const client_info = [
             [],
             [],
-            [],
+            ["Tag:", client.user.tag],
             [],
             [],
             [],
