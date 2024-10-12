@@ -4,7 +4,9 @@
   "description": "A Global Discord Bot",
   "main": "index.js",
   "scripts": {
-    "test": "Global"
+    "bot": "node src/index.js",
+    "push": "git push origin main",
+    "push-force": "git push origin main -f"
   },
   "repository": {
     "type": "git",
