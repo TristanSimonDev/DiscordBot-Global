@@ -6,9 +6,6 @@ const ColorOutput = require('../modules/ColorOutput').ColorOutput
 
 const client = new Discord.Client({ intents: [process.env.intents] })
 
-
-
-
 const EventFiles = fs.readdirSync("src/Events").filter(file => file.endsWith(".js"))
 
 for (const file of EventFiles) {
@@ -17,8 +14,9 @@ for (const file of EventFiles) {
 
     console.log(ColorOutput(`Event: [${Event.name}] with EventId [${Event.id}] loaded successfully`).green)
     client[Event.type](Event.name, async (...args) => Event.execute(...args))
-
 }
+
+
 
 client.login(process.env.TOKEN)
 .then(() => {
@@ -64,3 +62,4 @@ client.login(process.env.TOKEN)
     ); // Changed to red for errors
     console.error(`Error Details: ${error.message}`); // Log the error details for debugging
 });
+

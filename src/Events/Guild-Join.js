@@ -1,4 +1,14 @@
-const Discord = require('discord.js')
+const Discord = require('discord.js');
+const fs = require('fs');
+const esprima = require('esprima');
+
+
+let path_to_folder = "src/Event-Functions/Guild-Add"
+
+//load files
+let event_files = fs.readdirSync(path_to_folder).filter(file => file.endsWith('.js'));
+
+
 
 
 module.exports = {
@@ -16,5 +26,3 @@ module.exports = {
         
     }
 }
-
-const a  = 1
