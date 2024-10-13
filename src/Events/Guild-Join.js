@@ -19,7 +19,13 @@ module.exports = {
     async execute(guild) {
         if (!(guild instanceof Discord.Guild)) return;
 
-        console.log(guild.id)
+        for (const file of event_files) {
+            const Event = require(`../Event-Functions/Guild-Add/${file}`)
+
+            Event.execute(guild)
+
+            
+        }
 
 
 
