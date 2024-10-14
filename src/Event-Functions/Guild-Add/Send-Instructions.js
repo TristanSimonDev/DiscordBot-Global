@@ -22,8 +22,13 @@ module.exports = {
 
         const greeting = new Discord.EmbedBuilder()
             .setTitle("Thanks for using Nova bot")
+            .setDescription(
+                `1 --> Commands`
+        )
+        
+        const commands = new Discord.EmbedBuilder()
 
-        const tutorial_embeds = [greeting]
+        const tutorial_embeds = [greeting, commands]
 
         await tutorial_channel.send({ embeds: [...tutorial_embeds] })
 
