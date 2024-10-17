@@ -130,5 +130,8 @@ dist
 .pnp.*
 
 
-#
+#dont list test
 test
+
+#dont list data
+Data
