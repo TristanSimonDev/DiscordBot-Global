@@ -16,12 +16,10 @@ for (const file of EventFiles) {
     client[Event.type](Event.name, async (...args) => Event.execute(...args))
 }
 
-
-
 client.login(process.env.TOKEN)
 .then(() => {
     console.log(
-        ColorOutput(
+            ColorOutput(
             `\n=== Bot Login Info ===` +
                 `\n\nToken Length:                 ${process.env.TOKEN.length}` +
                 `\nNode Version:                   ${process.version}` +
@@ -37,14 +35,14 @@ client.login(process.env.TOKEN)
                     (process.memoryUsage().heapUsed / 1024 / 1024) * 100
                 ) / 100} MB` +
                 `\nStatus: Working [${client.user.tag}] => Logged in Successfully\n`
-        ).magenta
+        ).blue
     );
 })
 .catch((error) => {
     console.log(
         ColorOutput(
             `\n=== Bot Login Info ===` +
-                `\n\nToken Length:                  ${process.env.TOKEN.length}` +
+                `\n\nToken Length:                 ${process.env.TOKEN.length}` +
                 `\nNode Version:                   ${process.version}` +
                 `\nDevice Architecture:            ${process.arch}` +
                 `\nDiscord.js Version:             ${
