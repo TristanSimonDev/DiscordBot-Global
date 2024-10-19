@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 
 
 module.exports = {
-    name: Discord.Events.GuildCreate,
+    name: Discord.Events.InteractionCreate,
     type: 'on',
     id: 3,
 

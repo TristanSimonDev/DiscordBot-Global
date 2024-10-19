@@ -1,10 +1,8 @@
 const Discord = require('discord.js')
 const fs = require('fs')
 
-let path_to_folder = "src/Event-Functions/Client-Ready"
-
 // Load Files
-let event_files = fs.readdirSync(path_to_folder).filter(file => file.endsWith('.js'));
+let event_files = fs.readdirSync("src/Event-Functions/Client-Ready").filter(file => file.endsWith('.js'));
 
 
 module.exports = {
