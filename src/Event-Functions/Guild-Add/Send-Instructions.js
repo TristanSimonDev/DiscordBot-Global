@@ -27,6 +27,7 @@ module.exports = {
         )
         
         const commands = new Discord.EmbedBuilder()
+            .setTitle('Available Commands')
 
         const tutorial_embeds = [greeting, commands]
 
