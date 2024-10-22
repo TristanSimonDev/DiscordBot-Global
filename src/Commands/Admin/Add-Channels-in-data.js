@@ -35,13 +35,21 @@ module.exports = {
             .setDescription(`Succesfully verified \`[${dynamic_channel_selector} ${channel_id}]\` in the Database`)
         
         const error_embed = new Discord.EmbedBuilder()
-        .setDescription(`Error while trying to save \`[${dynamic_channel_selector} ${channel_id}\`] in the Database`)
+            .setDescription(`Error while trying to save \`[${dynamic_channel_selector} ${channel_id}\`] in the Database`)
+        
+        const alreadyadded_embed = new Discord.EmbedBuilder()
+        
         
         
         
 
         try {
-
+            
+            Object.entries(parsed_data).forEach(([key, value]) => {
+                if (value == channel_id) {
+                    
+                }
+            })
 
         parsed_data[dynamic_channel_selector] = channel_id
             
