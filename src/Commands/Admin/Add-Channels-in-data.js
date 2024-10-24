@@ -53,23 +53,29 @@ module.exports = {
                     
                     return 
                 } else {
+
                     // If the key matches but the channel ID doesn't, notify and update it
                     parsed_data[dynamic_channel_selector] = channel_id;
                     fs.writeFileSync(`./Data/Guilds/${guild_id}/channel_id.json`, JSON.stringify(parsed_data, null, 2), 'utf-8');
                     return interaction.reply({ embeds: [success_embed], ephemeral: true });
+                    
                 }
             } else {
+
                 // If no match was found, add the new entry
                 parsed_data[dynamic_channel_selector] = channel_id;
                 fs.writeFileSync(`./Data/Guilds/${guild_id}/channel_id.json`, JSON.stringify(parsed_data, null, 2), 'utf-8');
                 return interaction.reply({ embeds: [success_embed], ephemeral: true });
+
             }
     
         } catch (error) {
+
             console.error(error);
             const error_embed = new Discord.EmbedBuilder()
                 .setDescription(`Error while trying to save \`[${dynamic_channel_selector} ${channel_id}]\` in the Database`);
             return interaction.reply({ embeds: [error_embed], ephemeral: true });
+
         }
     }
         
