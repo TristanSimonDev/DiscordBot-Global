@@ -11,7 +11,7 @@ module.exports = {
 
         interaction.reply(`Ping: ${interaction.client.ws.ping}`)
 
-        ColorOutput(`The user ${interaction.user.tag} - ${interaction.user.id} in Guild ${interaction.guild.name} - ${interaction.guild.id} used the ping command`).blue
+        ColorOutput(`The user ${interaction.user.tag} - ${interaction.user.id} in Guild ${interaction.guild.name} - ${interaction.guild.id} used the ping command`).cyan()
     }
     
     
