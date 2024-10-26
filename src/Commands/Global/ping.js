@@ -1,4 +1,5 @@
 const Discord = require("discord.js")
+const { ColorOutput } = require('../../../modules/ColorOutput')
 
 module.exports = {
     data: new Discord.SlashCommandBuilder()
@@ -10,6 +11,7 @@ module.exports = {
 
         interaction.reply(`Ping: ${interaction.client.ws.ping}`)
 
+        ColorOutput(`The user ${interaction.user.tag} - ${interaction.user.id} in Guild ${interaction.guild.name} - ${interaction.guild.id} used the ping command`).blue
     }
     
     
