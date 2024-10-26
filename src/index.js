@@ -34,7 +34,7 @@ client.login(process.env.TOKEN)
 
     ColorOutput(
         `\n=== Bot Login Info ===` +
-        `\n\nToken Length:                 ${process.env.TOKEN.length}` +
+        `\n\nToken Length:                   ${process.env.TOKEN.length}` +
         `\nNode Version:                   ${process.version}` +
         `\nDevice Architecture:            ${process.arch}` +
         `\nDiscord.js Version:             ${require("discord.js").version}` +
