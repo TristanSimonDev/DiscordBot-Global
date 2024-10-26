@@ -1,4 +1,4 @@
-function ColorOutput(input) {
+function ColorOutput(text) {
     const colors = {
         red: 31,
         green: 32,
@@ -10,24 +10,13 @@ function ColorOutput(input) {
     };
 
     return {
-        get red() {
-            return `\x1b[${colors.red}m${input}\x1b[39m`;
-        },
-        get green() {
-            return `\x1b[${colors.green}m${input}\x1b[39m`;
-        },
-        get yellow() {
-            return `\x1b[${colors.cyan}m${input}\x1b[39m`;
-        },
-        get blue() {
-            return `\x1b[${colors.blue}m${input}\x1b[39m`;
-        },
-        get magenta() {
-            return `\x1b[${colors.magenta}m${input}\x1b[39m`;
-        },
-        get cyan() {
-            return `\x1b[${colors.cyan}m${input}\x1b[39m`;
-        }
+        red: () => console.log(`\x1b[${colors.red}m${text}\x1b[39m`),
+        green: () => console.log(`\x1b[${colors.green}m${text}\x1b[39m`),
+        yellow: () => console.log(`\x1b[${colors.yellow}m${text}\x1b[39m`),
+        blue: () => console.log(`\x1b[${colors.blue}m${text}\x1b[39m`),
+        magenta: () => console.log(`\x1b[${colors.magenta}m${text}\x1b[39m`),
+        cyan: () => console.log(`\x1b[${colors.cyan}m${text}\x1b[39m`),
+        white: () => console.log(`\x1b[${colors.white}m${text}\x1b[39m`)
     }
 }
 
