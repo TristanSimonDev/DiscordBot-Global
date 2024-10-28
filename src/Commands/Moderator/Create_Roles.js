@@ -2,12 +2,12 @@ const Discord = require('discord.js')
 
 module.exports = {
     data: new Discord.SlashCommandBuilder()
-        .setName('create_role')
-        .setDescription("This command will create a new discord role")
+        .setName('template_create_role')
+        .setDescription("This command will create template roles that have their own color!")
         .addStringOption(option => 
             option   
                 .setName('role_name')
-                .setDescription("the name for your role")
+                .setDescription("what role do you want to choose?")
                 .addChoices(
                     { name: "Admin", value: "Admin" },
                     { name: "Moderator", value: "Moderator" },
