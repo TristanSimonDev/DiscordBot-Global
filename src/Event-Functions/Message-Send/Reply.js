@@ -8,6 +8,6 @@ module.exports = {
 
         if (!(message instanceof Discord.Message)) return;
 
-        message.reply("sdsldddddd")
+        message.reply("ich kann nichts")
     }
 }
