@@ -33,7 +33,7 @@ module.exports = {
         
         		// The put method is used to fully refresh all commands in the guild with the current set
         		const data = await rest.put( // clientid / guildid
-        			Routes.applicationGuildCommands("1293981957079961651", "1293983440298971197"),
+        			Routes.applicationCommands("1293981957079961651", process.env.TOKEN),
         			{ body: commands },
         		);
         
