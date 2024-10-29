@@ -1,6 +1,6 @@
 const fs = require('fs')
 const Discord = require('discord.js')
-let { channel_template } = require('.vscode/Templates/Channel_Template.js')
+let  channel_template = require('../../../.vscode/Templates/Channel_Template').channel_template
 
 module.exports = {
     async execute(guild) {
