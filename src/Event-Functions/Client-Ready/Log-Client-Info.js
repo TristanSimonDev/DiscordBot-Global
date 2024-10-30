@@ -1,6 +1,6 @@
 //require Components
 const Discord = require('discord.js')
-
+const { ColorOutput } = require('../../../modules/ColorOutput');
 
 //define the function
 module.exports = {
@@ -22,8 +22,9 @@ module.exports = {
         //Use foreach to log the single arrays
 
         Object.entries(client_info_fields).forEach(([Key, Value]) => {
-            console.log(`${Key}: ${Value}`)
+            ColorOutput(`${Key}: ${Value}`).magenta()
         })
+        console.log("")
 
     }
 }
