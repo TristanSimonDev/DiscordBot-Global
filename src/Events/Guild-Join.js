@@ -21,8 +21,7 @@ module.exports = {
             const Event = require(`../Event-Functions/Guild-Add/${file}`)
 
             Event.execute(guild)
-
-            
+  
         }
 
         
