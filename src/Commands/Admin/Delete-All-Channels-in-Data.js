@@ -26,9 +26,10 @@ module.exports = {
         if (!(interaction instanceof Discord.CommandInteraction)) return;
 
         const guild_id = interaction.guild.id
+        const guild_name = interaction.guild.name
         const option = interaction.options.get("delete_channels").value
 
-        let data = fs.readFileSync(`./Data/Guilds/${guild_id}/channel_id.json`, 'utf8');
+        let data = fs.readFileSync(`./Data/Guilds/${guild_id}-${guild_name}/channel_id.json`, 'utf8');
         let parsed_data = JSON.parse(data);
 
         const success_embed = new Discord.EmbedBuilder()
@@ -43,7 +44,7 @@ module.exports = {
                 
                 //write the empty template
                 parsed_data = channel_template
-                fs.writeFileSync(`./Data/Guilds/${guild_id}/channel_id.json`, JSON.stringify(parsed_data, null, 2), 'utf-8')
+                fs.writeFileSync(`./Data/Guilds/${guild_id}-${guild_name}/channel_id.json`, JSON.stringify(parsed_data, null, 2), 'utf-8')
 
                 //show Nova is thinking...
                 await interaction.deferReply()
