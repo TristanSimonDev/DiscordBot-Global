@@ -1,6 +1,9 @@
 const { REST, Routes } = require('discord.js');
 const fs = require('node:fs');
 const dotenv = require('dotenv').config()
+const { ColorOutput } = require('../../../modules/ColorOutput');
+
+
 module.exports = {
 	async execute(client) {
         const commands = [];
@@ -29,7 +32,7 @@ module.exports = {
         // and deploy your commands!
         (async () => {
         	try {
-        		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+        		ColorOutput(`Started refreshing ${commands.length} application (/) commands.`).yellow();
         
         		// The put method is used to fully refresh all commands in the guild with the current set
         		const data = await rest.put( // clientid / guildid
@@ -37,7 +40,7 @@ module.exports = {
         			{ body: commands },
         		);
         
-        		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+        		ColorOutput(`Successfully reloaded ${data.length} application (/) commands.`).green();
         	} catch (error) {
         		// And of course, make sure you catch and log any errors!
         		console.error(error);
