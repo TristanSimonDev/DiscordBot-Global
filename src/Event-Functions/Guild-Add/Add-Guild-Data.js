@@ -7,13 +7,13 @@ module.exports = {
         if (!(guild instanceof Discord.Guild)) return;
 
         // Create a Folder in Data\Guilds with the Guild Id
-        CreateFolder_Files("Data/Guilds", guild.id)
+        CreateFolder_Files("Data/Guilds", `${guild.id}-${guild.name}`)
     }
 }
 
-async function CreateFolder_Files(folderPath, Guild_Id) {
+async function CreateFolder_Files(folderPath, Guild_Id_Guild_Name) {
 
-    const data_folder = fs.mkdirSync(`${folderPath}/${Guild_Id}`, { recursive: true, mode: 0o777 });
+    const data_folder = fs.mkdirSync(`${folderPath}/${Guild_Id_Guild_Name}`, { recursive: true, mode: 0o777 });
     
     fs.writeFileSync(`${data_folder}/channel_id.json`, JSON.stringify(channel_template, null, 2), 'utf8');
     
@@ -21,5 +21,3 @@ async function CreateFolder_Files(folderPath, Guild_Id) {
 
     fs.writeFileSync(`${data_folder}/ticket_data.json`, "{}")
 }
-
-//let data = CreateFolder_Files("Data/Guilds", "tes34234t")
