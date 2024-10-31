@@ -1,4 +1,5 @@
 const Permission_Bits = {
+    EVERYONE:                               0x0000000000000000, // 0
     CREATE_INSTANT_INVITE:                  0x0000000000000001, // 1
     KICK_MEMBERS:                           0x0000000000000002, // 2
     BAN_MEMBERS:                            0x0000000000000004, // 4
