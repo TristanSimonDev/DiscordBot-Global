@@ -1,9 +1,12 @@
 const Discord = require('discord.js')
+const { ColorOutput } = require('../../../modules/ColorOutput');
+const Permission_bits = require('../../../modules/Permission_Bits')
 
 module.exports = {
     data: new Discord.SlashCommandBuilder()
         .setName('template_create_role')
         .setDescription("This command will create template roles that have their own color!")
+        .setDefaultMemberPermissions(Permission_bits.MANAGE_ROLES)
         .addStringOption(option => 
             option   
                 .setName('role_name')
