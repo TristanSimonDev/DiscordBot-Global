@@ -28,3 +28,7 @@ let Guild_Data = ((Guild) => {
     })
 })  
 
+
+module.exports = {
+    Guild_Data
+}
