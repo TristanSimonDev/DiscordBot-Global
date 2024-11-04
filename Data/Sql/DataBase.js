@@ -28,6 +28,10 @@ let Guild_Data = ((Guild) => {
     })
 })  
 
+let Guild_Remove = ((Guild) => {
+    if (!(Guild instanceof Discord.Guild)) return;
+})
+
 
 module.exports = {
     Guild_Data
