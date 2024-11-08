@@ -7,7 +7,7 @@ let db = mysql.createConnection({
     user: process.env.user,
     password: process.env.password,
     port: process.env.port,
-    database: process.env.database
+    database: process.env.database,
 });
 
 db.connect((err) => {
