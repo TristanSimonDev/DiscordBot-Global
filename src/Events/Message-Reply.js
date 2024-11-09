@@ -19,7 +19,7 @@ module.exports = {
         if (message.author.bot) return;
 
         for (const file of event_files) {
-            console.log("hi")
+
             // Re-require the module each time to get the latest version
             const Event = require(`../Event-Functions/Message-Send/${file}`);
             await Event.execute(message); // Ensure this is awaited if Event.execute is async
