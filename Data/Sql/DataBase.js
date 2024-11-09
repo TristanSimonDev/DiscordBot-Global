@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
 const mysql = require('mysql')
 const dotenv = require('dotenv').config()
+const canvas = require('canvas')
 
 let db = mysql.createConnection({
     host: process.env.host,
@@ -28,9 +29,14 @@ let Guild_Data = ((Guild) => {
     })
 })  
 
-let Guild_Remove = ((Guild) => {
-    if (!(Guild instanceof Discord.Guild)) return;
+let guild_remove = ((guild) => {
+    if (!(guild instanceof Discord.Guild)) return;
 })
+
+let give_xp = (user, guild) => {
+    if (!(guild instanceof Discord.Guild)) return;
+    if (!(user instanceof Discord.User)) return;
+}
 
 
 module.exports = {
