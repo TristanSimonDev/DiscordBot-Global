@@ -37,20 +37,22 @@ let give_xp = async (message) => {
     if (!(message instanceof Discord.Message)) return;
 
     const user_id = message.author.id //get the user id
-    const now = Date.now() //get the timestamp
-
-    const xp_gain = Math.floor(Math.random() * 10 + 3)
+    const xp_gain = Math.floor(Math.random() * 10 + 3) //how much xp the user gets
 
     db.query(`SELECT * FROM user_data WHERE user_id = ?`, [user_id], async (err, results) => {
-        if (err) throw err;
-
-        //create profile card
-        
+        if (err) throw err;   
 
         let user = results[0];
-        console.log(results)
+        /*
+        Results[1] will be RowDataPacket { user_id: '848247310520680489', xp: 999, level: 999 },
+        but RowDataPacket get overwritten by user so its: user { user_id: '848247310520680489', xp: 999, level: 999 }
+        Results will be [ RowDataPacket { user_id: '848247310520680489', xp: 999, level: 999 } ]
+        nsole.log(results[0])
+        */
+        
 
         if (!user) {
+
             // If user not in database, create a new entry
             db.query(`INSERT INTO user_data (user_id, xp, level) VALUES (?, ?, ?)`, [user_id, xp_gain, 1]);
             user = { xp: xp_gain, level: 1 };
@@ -59,18 +61,19 @@ let give_xp = async (message) => {
 
             // Update user XP and check for level-up
             user.xp += xp_gain;
-            let newLevel = user.level;
+            let curret_level = user.level;
 
-            // Level-up formula (example: level * 100 XP for next level)
-            const Req_XP = (Math.log10(user.level + 1 / (user.level + 1 / Math.log(user.level) + 1)) * user.level) + 1;
+            const Req_XP = user.level * 100;
+
+            //(Math.log10(user.level + 1 / (user.level + 1 / Math.log(user.level) + 1)) * user.level) + 1 (level boost formula)
 
             if (user.xp >= Req_XP) {
-                newLevel++;
-                user.xp -= Req_XP;
-                message.channel.send(`${message.author} has leveled up to Level ${newLevel}! 🎉`);
+                curret_level++;
+                user.xp = 0;
+                message.channel.send(`${message.author} has leveled up to Level ${curret_level}! 🎉`);
             }
 
-            db.query(`UPDATE user_data SET xp = ?, level = ? WHERE user_id = ?`, [user.xp, newLevel, user_id]);
+            db.query(`UPDATE user_data SET xp = ?, level = ? WHERE user_id = ?`, [user.xp, curret_level, user_id]);
             const attachment = await createLevelCanvas(user);
             message.channel.send({ files: [attachment] });
         }
@@ -86,22 +89,32 @@ async function createLevelCanvas(user) {
     const ctx = canvas.getContext('2d');
 
     // Load and draw background image
-    const background = await loadImage('https://png.pngtree.com/thumb_back/fh260/background/20230408/pngtree-rainbow-curves-abstract-colorful-background-image_2164067.jpg');
+    const background = await loadImage('https://wallpapers.com/images/hd/black-desktop-background-9yrsu84fcbjv6omi.jpg');
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
     // Set up text styles and draw level and XP text
     ctx.font = '30px sans-serif';
     ctx.fillStyle = '#ffffff';
+    ctx.lineWidth = 4;           // Width of the outline
     ctx.fillText(`Level: ${user.level}`, 200, 80);
     ctx.fillText(`XP: ${user.xp}`, 200, 120);
 
     // Draw XP bar
-    const xpBarWidth = 400;
-    const currentLevelXp = user.level * (Math.log10(user.level + 1 / (user.level + 1 / Math.log(user.level) + 1)) * user.level) + 1
-    const normalizedXp = user.xp % currentLevelXp; // XP within the current level
-    const progress = normalizedXp / currentLevelXp;
+    const xpBarWidth = 250;
+    const current_Xp = user.xp;
+    const next_level_xp = user.level * 100;
+    const progress = current_Xp / next_level_xp;
+    const clampedProgress = Math.max(0, Math.min(progress, 1)); // if the progress > 1 set it to 1 so the bar dont overflow
+
+    // Fill XP bar
     ctx.fillStyle = '#00ff00';
-    ctx.fillRect(200, 150, xpBarWidth * progress, 20); //with * progress needs too get debugged
+    ctx.fillRect(200, 150, xpBarWidth * progress, 20);
+
+    // Add black stroke around the XP bar
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2; // Thickness of the border
+    ctx.strokeRect(200, 150, xpBarWidth, 20); // Draw stroke around the full bar width
+
 
     // Create and send attachment
     const attachment = new Discord.AttachmentBuilder(canvas.toBuffer(), { name: 'level-card.jpg' });
