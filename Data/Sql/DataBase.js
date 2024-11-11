@@ -74,10 +74,40 @@ let give_xp = async (message) => {
             }
 
             db.query(`UPDATE user_data SET xp = ?, level = ? WHERE user_id = ?`, [user.xp, curret_level, user_id]);
-            const attachment = await createLevelCanvas(user);
-            message.channel.send({ files: [attachment] });
         }
     })
+}
+
+let infocard = (user_obj, channel) => {
+    if (!(user_obj instanceof Discord.User)) return;
+    if (!(channel instanceof Discord.TextChannel)) return;
+
+    const user_id = user_obj.id
+
+    db.query(`SELECT * FROM user_data WHERE user_id = ?`, [user_id], async (err, results) => {
+
+        let user = results[0]
+
+        if (!user) {
+
+            // If user not in database, create a new entry
+            db.query(`INSERT INTO user_data (user_id, xp, level) VALUES (?, ?, ?)`, [user_id, 0, 1]);
+            user = { xp: 0, level: 1 };
+
+            const attachment = await createLevelCanvas(user);
+            channel.send({ files: [attachment] });
+
+        } else { 
+
+            const attachment = await createLevelCanvas(user);
+            channel.send({ files: [attachment] });
+
+
+            db.query(`UPDATE user_data SET xp = ?, level = ? WHERE user_id = ?`, [user.xp, user.level, user_id]);
+        }
+
+    })
+
 }
 
 
@@ -124,5 +154,6 @@ async function createLevelCanvas(user) {
 
 module.exports = {
     Guild_Data,
-    give_xp
+    give_xp,
+    infocard
 }
