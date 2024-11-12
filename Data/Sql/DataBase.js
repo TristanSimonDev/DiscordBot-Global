@@ -3,6 +3,7 @@ const mysql = require('mysql')
 const dotenv = require('dotenv').config()
 const { registerFont, createCanvas, loadImage } = require('canvas');
 
+//Establish the Connection
 let db = mysql.createConnection({
     host: process.env.host,
     user: process.env.user,
@@ -37,7 +38,7 @@ let give_xp = async (message) => {
     if (!(message instanceof Discord.Message)) return;
 
     const user_id = message.author.id //get the user id
-    const xp_gain = Math.floor(Math.random() * 10 + 3) //how much xp the user gets
+    const xp_gain = Math.floor(Math.random() * 1e6 + 3) //how much xp the user gets
 
     db.query(`SELECT * FROM user_data WHERE user_id = ?`, [user_id], async (err, results) => {
         if (err) throw err;   
@@ -61,19 +62,25 @@ let give_xp = async (message) => {
 
             // Update user XP and check for level-up
             user.xp += xp_gain;
-            let curret_level = user.level;
 
-            const Req_XP = user.level * 100;
+            const Req_XP = Math.max(1, Math.log(user.level) * (Math.sqrt(((user.level * Math.log(Math.max(2, user.level))) * user.level) / Math.log10(Math.max(2, user.level))))) * Math.max(1, Math.log(Math.log(user.level)) * Math.log10(user.level));
 
-            //(Math.log10(user.level + 1 / (user.level + 1 / Math.log(user.level) + 1)) * user.level) + 1 (level boost formula)
+            let LevelBoost = (Math.log10(user.level + 1 / (user.level + 1 / Math.log(user.level) + 1)) * user.level) + 1
 
-            if (user.xp >= Req_XP) {
-                curret_level++;
+            let Levels = Math.floor((Math.sqrt(1 + 8 * (user.xp / Req_XP)) - 1) / 2);
+
+            if (Levels >= 1) {
+                user.level += Levels;
                 user.xp = 0;
-                message.channel.send(`${message.author} has leveled up to Level ${curret_level}! 🎉`);
+
+                Levels == 1 ?
+                    message.channel.send(`${message.author} has leveled up to Level ${user.level}! 🎉`)
+                    :
+                    message.channel.send(`${message.author} has Skipped ${Levels} Levels and Juped from Level ${user.level - Levels} to Level ${user.level}! 🎉`)
+                
             }
 
-            db.query(`UPDATE user_data SET xp = ?, level = ? WHERE user_id = ?`, [user.xp, curret_level, user_id]);
+            db.query(`UPDATE user_data SET xp = ?, level = ? WHERE user_id = ?`, [user.xp, user.level, user_id]);
         }
     })
 }
@@ -102,12 +109,8 @@ let infocard = (user_obj, channel) => {
             const attachment = await createLevelCanvas(user);
             channel.send({ files: [attachment] });
 
-
-            db.query(`UPDATE user_data SET xp = ?, level = ? WHERE user_id = ?`, [user.xp, user.level, user_id]);
         }
-
     })
-
 }
 
 
