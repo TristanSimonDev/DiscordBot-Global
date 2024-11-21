@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
-const mysql = require('mysql')
+const mysql = require('mysql2')
 const dotenv = require('dotenv').config()
+const MathUtils = require('./Math')
 const { registerFont, createCanvas, loadImage } = require('canvas');
 
 //Establish the Connection
@@ -16,16 +17,13 @@ db.connect((err) => {
     if (err) return console.error(err);
     console.log("Connected");
     db.query("CREATE TABLE IF NOT EXISTS Guild_Data (name VARCHAR(50), id VARCHAR(50))", (err, result) => {
-        if (err) return console.error(err);
     });
 });
 
 let Guild_Data = ((Guild) => {
     if (!(Guild instanceof Discord.Guild)) return;
     db.query(`Insert Into Guild_Data (name, id) VALUE (?, ?)`, [Guild.name, Guild.id], (err, res) => {
-        if (err) return console.error(err);
         console.log("done");
-        
     })
 })  
 
@@ -38,11 +36,9 @@ let give_xp = async (message) => {
     if (!(message instanceof Discord.Message)) return;
 
     const user_id = message.author.id //get the user id
-    const xp_gain = Math.floor(Math.random() * 1e6 + 3) //how much xp the user gets
+    
 
     db.query(`SELECT * FROM user_data WHERE user_id = ?`, [user_id], async (err, results) => {
-        if (err) throw err;   
-
         let user = results[0];
         /*
         Results[1] will be RowDataPacket { user_id: '848247310520680489', xp: 999, level: 999 },
@@ -55,28 +51,28 @@ let give_xp = async (message) => {
         if (!user) {
 
             // If user not in database, create a new entry
-            db.query(`INSERT INTO user_data (user_id, xp, level) VALUES (?, ?, ?)`, [user_id, xp_gain, 1]);
-            user = { xp: xp_gain, level: 1 };
+            db.query(`INSERT INTO user_data (user_id, xp, level, last_xp_time) VALUES (?, ?, ?)`, [user_id, 0, 1, new Date()]);
+            user = { xp: 0, level: 1, last_xp_time: new Date() };
 
         } else {
 
-            // Update user XP and check for level-up
-            user.xp += xp_gain;
+            let xp_gain = MathUtils.random_xp() //how much xp the user gets!
+            let Req_XP = MathUtils.required_xp(user.level) //the level requirement for the next level up!
+            let LevelBoost = MathUtils.level_boost(user.level) //This is the XP Boost. The more levels the higher the Boost!
+            let boosted_xp_gain = Math.floor(xp_gain * LevelBoost) //apply the boost to the random xp
 
-            const Req_XP = Math.max(1, Math.log(user.level) * (Math.sqrt(((user.level * Math.log(Math.max(2, user.level))) * user.level) / Math.log10(Math.max(2, user.level))))) * Math.max(1, Math.log(Math.log(user.level)) * Math.log10(user.level));
+            user.xp += boosted_xp_gain // Update user XP
 
-            let LevelBoost = (Math.log10(user.level + 1 / (user.level + 1 / Math.log(user.level) + 1)) * user.level) + 1
+            let Levels_with_Skipp = MathUtils.level_skipps(user.xp, Req_XP) //This will be 0, 1 or x ∈ R (∞) [will handle skipped levels]
 
-            let Levels = Math.floor((Math.sqrt(1 + 8 * (user.xp / Req_XP)) - 1) / 2);
-
-            if (Levels >= 1) {
-                user.level += Levels;
+            if (Levels_with_Skipp >= 1) {
+                user.level += Levels_with_Skipp;
                 user.xp = 0;
 
-                Levels == 1 ?
+                Levels_with_Skipp == 1 ?
                     message.channel.send(`${message.author} has leveled up to Level ${user.level}! 🎉`)
                     :
-                    message.channel.send(`${message.author} has Skipped ${Levels} Levels and Juped from Level ${user.level - Levels} to Level ${user.level}! 🎉`)
+                    message.channel.send(`${message.author} has Skipped ${Levels_with_Skipp} Levels and Juped from Level ${user.level - Levels_with_Skipp} to Level ${user.level}! 🎉`)
                 
             }
 
@@ -135,7 +131,7 @@ async function createLevelCanvas(user) {
     // Draw XP bar
     const xpBarWidth = 250;
     const current_Xp = user.xp;
-    const next_level_xp = user.level * 100;
+    const next_level_xp = Math.max(1, Math.log(user.level) * (Math.sqrt(((user.level * Math.log(Math.max(2, user.level))) * user.level) / Math.log10(Math.max(2, user.level))))) * Math.max(1, Math.log(Math.log(user.level)) * Math.log10(user.level)) | 1;
     const progress = current_Xp / next_level_xp;
     const clampedProgress = Math.max(0, Math.min(progress, 1)); // if the progress > 1 set it to 1 so the bar dont overflow
 
