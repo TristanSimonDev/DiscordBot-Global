@@ -11,5 +11,6 @@ module.exports = {
         if (message.author.bot) return;
 
         db.give_xp(message)
+
     }
 }
